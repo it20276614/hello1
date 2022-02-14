@@ -1,0 +1,81 @@
+a)//1st create incomplete type
+
+create type Emp_t
+/
+create type Dept_t
+/
+create type emp_t AS OBJECT (
+
+       EMPNO char(6),
+       FIRSTNAME varchar(12),
+       LASTNAME varchar(15),
+       WORKDEPT REF dept_t,
+        SEX char(1),
+      BIRTHDATE date,
+     SALARY number(8,2),
+   
+)
+/
+create type Dept_t AS OBJECT(
+
+     DEPTNO char(3),
+     DEPTNAME varchar(36),
+    MGRNO REF emp_t,
+   ADMRDEPT REF Dept_t
+)
+/
+
+b)
+create table OREMP OF emp_t(
+constraint OREMP pk_PRIMARY KEY (EMPNO),
+constraint OREMP_FIRSTNAME_MN2 FIRSTNAME NOT NULL,
+constraint OREMP_LASTNAME_MN2 LASTNAME NOT NULL,
+constraint OREMP SCC CKD CHECK (SEX -'M' OR SEX - 'F' OR SEX - '1')
+
+)
+/
+create table ORDEPT OF Dept_t(
+constraint ORDEPT pk_PRIMARY KEY (DEPTNO),
+constraint ORDEPT_DEPTNAME_MN3 DEPTNAME NOT NULL,
+constraint ORDEPT_MGRNO_FK3 FOREIGN KEY(MGRNO) REFERENCE OREMP,
+constraint ORDEPT_ADMDEPT_FK3 FOREIGN KEY(ADMRDEPT) REFERENCE ORDEPT,
+
+)
+/
+
+//add the fk constraint after creating dept gtable
+
+alter table OREMP,
+add constraint OREMP_WORKDEPT_FK3 FOREIGN KEY(WORKDEP) REFERENCE ORDEPT
+
+c) 
+insert into ORDEPT values(dept_t('A00','SPIFFY COPUTER SERVICE DIV',null,null))
+insert into ORDEPT values(dept_t('B01','PLANNING',null,(select ref(c) from ORDEPT
+                                                    where d.DEPTNO = 'A00')),
+insert into ORDEPT values(dept_t('C01','INFORMATION CENTER',null,(select ref(c) from ORDEPT
+                                                    where d.DEPTNO = 'A00')),
+insert into ORDEPT values(dept_t('D01','DEVELOPMENT CENTER',null,(select ref(c) from ORDEPT
+                                                    where d.DEPTNO = 'C01')),
+d)
+insert into EMPT values (emp_t('000010','CHRISTINE','HAAS',(select ref(c) from ORDEPT
+                                                           where d.DEPTNO = 'A00')),
+insert into EMPT values (emp_t('000020','MICHALE','THOMPSAN',(select ref(c) from ORDEPT
+                                                           where d.DEPTNO = 'B01')),
+
+
+e)update ORDEMPT d
+   set d.MDRNO- (select ref(e) from ORDEPT e where e.EMPNO - '00010')
+  where d.DEPTNO = 'A00'
+
+
+2)
+ a) select d.DEPTNAME, d.MGRNO.LASTNAME
+   from ORDEPT d
+
+ b)select e.EMPNO, e.LASTNAME,d.
+
+
+
+
+
+

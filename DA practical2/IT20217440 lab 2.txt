@@ -1,0 +1,52 @@
+CREATE TYPE dept_t AS OBJECT(
+)
+/
+CREATE TYPE emp_t AS OBJECT (
+eno CHAR(6),
+firstname VARCHAR2(12),
+lastname VARCHAR2(15),
+workdept REF dept_t,
+sex CHAR(1),
+brithdate DATE,
+salary NUMBER(8,2)
+)
+/
+CREATE TYPE dept_t AS OBJECT (
+dno CHAR(3),
+deptname VARCHAR2(32),
+mgrno REF emp_t,
+admrdept REF dept_t
+
+)
+/
+CREATE TABLE OREMP of emp_t(
+CONSTRAINT emp_pk PRIMARY KEY(eno),
+CONSTRAINT empfirstname firstname NOT NULL,
+CONSTRAINT emplastname lastname NOT NULL,
+CONSTRAINT chaeck_sex CHECK (sex='M' OR sex='m' OR sex='F' OR sex='f')
+)
+/
+CREATE TABLE ORDEPT of dept_t(
+CONSTRAINT dep_pk PRIMARY KEY(dno),
+CONSTRAINT mgr_fk FOREING KEY(mgrno) REFERENCES OREMP ,
+CONSTRAINT admrdept_fk FOREING KEY(admrdept) REFERENCES ORDEPT,
+CONSTRAINT dep_no dno NOT NULL,
+CONSTRAINT dep_name deptname NOT NULL
+)
+/
+ALTER TABLE OREMP ADD CONSTRAINT tbl_fk FOREINGKEY(workdept) REFERENCES ORDEPT
+/
+INSERT INTO OREMP VALUES(emp_t('000010','CHRISTINE','HAAS',NULL,'F','14-AUG-53','72750'))
+/
+INSERT INTO ORDEPT VALUES(dept_t('000010','CHRISTINE','HAAS',NULL,'F','14-AUG-53','72750'))
+/
+
+SELECT d.deptname , d.mgrno.lastname AS mgrname
+FROM ORDEPT d
+/
+SELECT e.eno , e.lastname, e.workdept.deptname AS deptname
+FROM OREMP e
+/
+SELECT d.dno , d.deptname ,d.admrdept.deptname AS admname
+FROM ORDEPT d
+/

@@ -1,0 +1,102 @@
+a......
+
+create type dept_t2
+
+
+create type emp_t2 as object(
+  EMPNO CHAR (6),
+  FIRSTNAME VARCHAR(12),
+  LASTNAME VARCHAR(15),
+  WORKDEPT REFF DEPT_T2
+  SEX CHAR(1),
+  BIRTHDATE DATE,
+  SALARY NUMBER(8,2)
+  )
+
+crete table dept_t2 as object(
+ DEPTNO CHAR(3),
+ DEPTNAME VARCHAR(36),
+ MGRNO REF emp_t2
+ ADMRDEPT REF DEPT_T2
+ )
+
+
+create type dept_t3
+
+
+
+create type emp_t3 as object(
+  EMPNO CHAR (6),
+  FIRSTNAME VARCHAR(12),
+  LASTNAME VARCHAR(15),
+  WORKDEPT REFF DEPT_T2
+  SEX CHAR(1),
+  BIRTHDATE DATE,
+  SALARY NUMBER(8,2)
+  )
+
+b........
+create table OREMP2 of emp_t2(
+ constraint OREMP_PK2 PRIMARY KEY(EMPNO),
+ constraint OREMP_FIRSTNAME_NM2 FIRSTNAME NOT NULL,
+ constraint OREMP_LASTNAME_NM2 LASTNAME NOT NULL,
+ constraint OREMP_SEC_CK2 CHECK (SEX='M' OR SEX='F'OR SEX='m' OR SEX='f')
+ )
+
+
+create table ORDEPT3 OF dept_t3(
+
+  constraint ORDEPT_PK3 PRIMARY KEY(DEPTNO),
+  constraint ORDEPT_DEPTNAME_NM3 DEPTNAME NOT NULL,
+  constraint ORDEPT_MGRNO_FK3 FOREIGN KEY(MGRNO) REFERENCES OREMP3,
+  constraint ORDEPT_ADMRDEPT_FK3 FOREIGN KEY(ADMRDEPT) REFERENCES ORDEPT3
+)
+
+
+
+
+alter table OREMP3
+ADD constraint  OREMP_WORKDEPT_FK3 FOREIGN KEY(WORKDEPT) REFERENCES ORDEPT3
+
+
+
+
+C.......
+
+
+insert into ORDEPT4 value(dept_t3('A00','SPIFFY COMPUTER SERVICE DIV',null,null))
+
+
+
+
+
+insert into ORrept4 value(dept_t4('001','PLANNING',null, (select ref(d) from ORDEPT4 d where d.DEPTNO='A00')))
+
+
+
+insert into OREMP4 values(DEPT_T4('001','DEVELOPMENT CENTER',null,(select ref(d) from ORDEPT4 d where d.DEPTNO='C01')))
+
+
+
+insert into OREMP4 values(EMP_T4('0000010',"christine','Hass',(select ref(d) from ORDEPT4 d where d.DEPTNO='A00'),'F','14-AUG-1953',72750))
+
+
+
+
+update ORDEPT4 d
+ 2 set d.MGRNO=(select ref(e) FROM OREMP4 e where e.EMPNO='000010')
+3 where d.DEPTNO='A00' 
+
+
+
+2.............
+	a.....
+
+SELECT d.DEPTNAME,d.MGRNO,LASTNAME
+from ORDEPT4
+
+
+
+
+
+
